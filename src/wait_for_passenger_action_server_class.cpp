@@ -7,7 +7,7 @@ MinimalActionServer::MinimalActionServer(const rclcpp::NodeOptions &action_serve
 {
   // Bind the actual goal, cancel, and accepted with our desired callbacks (handles)
   using namespace std::placeholders;
-  this->action_server_ = rclcpp_action::create_server<WaitForPassenger>(
+  this->action_server_ = rclcpp_action::create_server<CustomAction>(
     this->get_node_base_interface(),
     this->get_node_clock_interface(),
     this->get_node_logging_interface(),
@@ -21,7 +21,7 @@ MinimalActionServer::MinimalActionServer(const rclcpp::NodeOptions &action_serve
 // Handle Goal Request
 rclcpp_action::GoalResponse MinimalActionServer::handle_goal(
   const rclcpp_action::GoalUUID &uuid,
-  std::shared_ptr<const WaitForPassenger::Goal> goal_request)
+  std::shared_ptr<const CustomAction::Goal> goal_request)
 {
   RCLCPP_INFO(this->get_logger(), "Server: Received goal request: %d", goal_request->goal);
   (void)uuid;
@@ -59,9 +59,9 @@ void MinimalActionServer::execute(const std::shared_ptr<GoalHandle> goal_handle_
   // Goal
   const auto requested_goal = goal_handle_->get_goal();
   // Feedback
-  auto feedback = std::make_shared<WaitForPassenger::Feedback>();
+  auto feedback = std::make_shared<CustomAction::Feedback>();
   // Result
-  auto result = std::make_shared<WaitForPassenger::Result>();
+  auto result = std::make_shared<CustomAction::Result>();
 
   // Let's make the action count up to goal
   RCLCPP_INFO(this->get_logger(), "Server: Executing goal");

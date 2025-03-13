@@ -7,10 +7,10 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(ament_cmake_auto REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 ament_auto_find_build_dependencies()
 
 
@@ -32,21 +32,11 @@ install(TARGETS wait_for_passenger_action_server
   DESTINATION lib/${PROJECT_NAME}
 )
 
-
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/WaitForPassenger.action")
-
 # Install launchfile
 install(
   DIRECTORY
     launch
   DESTINATION share/${PROJECT_NAME}
 )
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  set(ament_cmake_copyright_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
 
 ament_package() 

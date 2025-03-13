@@ -5,7 +5,7 @@ using namespace std;
 MinimalActionClient::MinimalActionClient(const rclcpp::NodeOptions &node_options)
   : Node("wait_for_passenger_action_client", node_options)
 {
-  this->client_ptr_ = rclcpp_action::create_client<WaitForPassenger>(
+  this->client_ptr_ = rclcpp_action::create_client<CustomAction>(
     this->get_node_base_interface(),
     this->get_node_graph_interface(),
     this->get_node_logging_interface(),
@@ -23,7 +23,7 @@ void MinimalActionClient::send_goal(int objective)
   }
 
   // Bind the actual goal, feedback, and results with our desired callbacks
-  auto send_goal_options = rclcpp_action::Client<WaitForPassenger>::SendGoalOptions();
+  auto send_goal_options = rclcpp_action::Client<CustomAction>::SendGoalOptions();
   using namespace std::placeholders;
   send_goal_options.goal_response_callback =
     std::bind(&MinimalActionClient::goal_response_callback, this, _1);
@@ -33,7 +33,7 @@ void MinimalActionClient::send_goal(int objective)
     std::bind(&MinimalActionClient::result_callback, this, _1);
   
   // create the goal message
-  auto goal_msg = WaitForPassenger::Goal();
+  auto goal_msg = CustomAction::Goal();
   goal_msg.goal = objective;
   // Send the actual goal
   RCLCPP_INFO(this->get_logger(), "Client: Sending goal");
@@ -57,7 +57,7 @@ void MinimalActionClient::goal_response_callback(GoalHandle::SharedPtr goal_mess
 // Feedback Callback
 void MinimalActionClient::feedback_callback(
   GoalHandle::SharedPtr,
-  const std::shared_ptr<const WaitForPassenger::Feedback> feedback_message)
+  const std::shared_ptr<const CustomAction::Feedback> feedback_message)
 {
   // Load the array of numbers into a string and print it
   std::stringstream ss;
