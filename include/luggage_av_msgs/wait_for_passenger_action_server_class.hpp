@@ -6,26 +6,26 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 
-#include "custom_action/action/custom_action.hpp"
+#include "luggage_av_actions/action/luggage_av_actions.hpp"
 
 class MinimalActionServer : public rclcpp::Node
 {
 public:
-  // CustomAction class
-  using CustomAction = custom_action::action::CustomAction;
+  // WaitForPassengerAction class
+  using WaitForPassengerAction = luggage_av_actions::action::WaitForPassengerAction;
   // GoalHandle class (handles the accept, the cancel, and the execute functions)
-  using GoalHandle = rclcpp_action::ServerGoalHandle<CustomAction>;
+  using GoalHandle = rclcpp_action::ServerGoalHandle<WaitForPassengerAction>;
 
   explicit MinimalActionServer(const rclcpp::NodeOptions &action_server_options = rclcpp::NodeOptions());
 
 private:
   // Action Server
-  rclcpp_action::Server<CustomAction>::SharedPtr action_server_;
+  rclcpp_action::Server<WaitForPassengerAction>::SharedPtr action_server_;
 
   // Handle Goal Request
   rclcpp_action::GoalResponse handle_goal(
     const rclcpp_action::GoalUUID &uuid,
-    std::shared_ptr<const CustomAction::Goal> goal_request);
+    std::shared_ptr<const WaitForPassengerAction::Goal> goal_request);
 
   // Handle cancel
   rclcpp_action::CancelResponse handle_cancel(

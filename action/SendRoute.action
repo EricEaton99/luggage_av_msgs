@@ -1,12 +1,13 @@
 # Important that the file_name starts with capital letter and has no symbols
 # Except the first letter, each other capital letter will be replaced with _ when including the custome message:
-# example: #include "custom_action/action/custom_action.hpp"
+# example: #include "luggage_av_actions/action/luggage_av_actions.hpp"
 
 # Request
-int32 goal
+geometry_msgs/PoseStamped pickup_pose
+geometry_msgs/PoseStamped dropoffpose
 ---
-# Result
-bool succeeded
+# Result 
+bool success
 ---
-# Feedback
-int32[] sequence
+# Feedback 
+std_msgs/Empty feedback
