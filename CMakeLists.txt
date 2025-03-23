@@ -14,6 +14,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
+# Generate interfaces for the action
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/SendRoute.action"
   DEPENDENCIES
@@ -21,7 +22,11 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   std_msgs
 )
 
-include_directories(include)
+# Include directories
+include_directories(
+  include
+  ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
+)
 
 # Install directories
 install(DIRECTORY
@@ -34,5 +39,40 @@ install(DIRECTORY
   action
   DESTINATION share/${PROJECT_NAME}
 )
+
+
+set(DEPENDENCIES
+  # these must all be the names of cpp files in the src/ directory
+  send_route_client
+  send_route_server
+)
+
+
+foreach(Dependency IN ITEMS ${DEPENDENCIES})
+
+  # Build the client executable
+  add_executable(${Dependency} src/${Dependency}.cpp)
+  ament_target_dependencies(${Dependency}
+    rclcpp
+    rclcpp_action
+    geometry_msgs
+    std_msgs
+    rosidl_default_runtime
+  )
+
+  # Link the generated action code
+  target_link_libraries(${Dependency}
+    ${PROJECT_NAME}__rosidl_typesupport_cpp
+  )
+
+  # Install the executable files
+  install(TARGETS
+    ${Dependency}
+    DESTINATION lib/${PROJECT_NAME}
+  )
+
+endforeach()
+
+
 
 ament_package()

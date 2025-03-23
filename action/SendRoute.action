@@ -1,10 +1,6 @@
-# Important that the file_name starts with capital letter and has no symbols
-# Except the first letter, each other capital letter will be replaced with _ when including the custome message:
-# example: #include "luggage_av_actions/action/luggage_av_actions.hpp"
-
 # Request
 geometry_msgs/PoseStamped pickup_pose
-geometry_msgs/PoseStamped dropoffpose
+geometry_msgs/PoseStamped dropoff_pose
 ---
 # Result 
 bool success
