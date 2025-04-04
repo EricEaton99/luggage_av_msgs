@@ -23,6 +23,20 @@ const geometry_msgs::msg::PoseStamped DEFAULT_DROPOFF_POSE = [] {
     return pose;
 }();
 
+const geometry_msgs::msg::PoseStamped DEFAULT_OTHER_POSE = [] {
+    geometry_msgs::msg::PoseStamped pose;
+    pose.header.frame_id = "luggage_av/map";
+    pose.pose.position.x = -1.0;
+    pose.pose.position.y = 2.0;
+    return pose;
+}();
+
+const geometry_msgs::msg::PoseStamped DEFAULT_POSES[] = {
+    DEFAULT_PICKUP_POSE,
+    DEFAULT_DROPOFF_POSE,
+    DEFAULT_OTHER_POSE,
+};
+
 class SendRouteClient : public rclcpp::Node
 {
 public:
@@ -48,8 +62,22 @@ public:
 
     // Create a goal
     auto goal = SendRoute::Goal();
-    goal.pickup_pose = DEFAULT_PICKUP_POSE;
-    goal.dropoff_pose = DEFAULT_DROPOFF_POSE;
+    // Get pickup and dropoff poses from console input
+    double pickup_x, pickup_y, dropoff_x, dropoff_y;
+    std::cout << "Enter pickup pose: x y: ";
+    std::cin >> pickup_x >> pickup_y;
+    std::cout << "Enter dropoff pose: x y: ";
+    std::cin >> dropoff_x >> dropoff_y;
+
+    goal.pickup_pose.header.frame_id = "luggage_av/map";
+    goal.pickup_pose.pose.position.x = pickup_x;
+    goal.pickup_pose.pose.position.y = pickup_y;
+
+    goal.dropoff_pose.header.frame_id = "luggage_av/map";
+    goal.dropoff_pose.pose.position.x = dropoff_x;
+    goal.dropoff_pose.pose.position.y = dropoff_y;
+    // goal.pickup_pose = DEFAULT_PICKUP_POSE;
+    // goal.dropoff_pose = DEFAULT_DROPOFF_POSE;
 
     // Send the goal
     auto send_goal_options = rclcpp_action::Client<SendRoute>::SendGoalOptions();
